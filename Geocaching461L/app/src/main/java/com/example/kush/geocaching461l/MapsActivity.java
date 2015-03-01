@@ -1,17 +1,23 @@
 package com.example.kush.geocaching461l;
 
-import android.support.v4.app.FragmentActivity;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.view.View;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity {
+public class MapsActivity extends FragmentActivity{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-
+    double currentLatitude;
+    double currentLongitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,4 +68,22 @@ public class MapsActivity extends FragmentActivity {
     private void setUpMap() {
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
     }
+
+    public void displayCurrentLocation (View view) {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000, 10, this);
+        Location gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+
+        if (gpsLocation != null) {
+            currentLatitude = gpsLocation.getLatitude();
+            currentLongitude = gpsLocation.getLongitude();
+        }
+        mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude, currentLongitude))
+                    .title("Current Location"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(25, 25)).title(currentLatitude+""));
+        //setUpMapIfNeeded();
+    }
+
+
 }

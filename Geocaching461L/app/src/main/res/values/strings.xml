@@ -3,5 +3,7 @@
 
     <string name="app_name">Geocaching461L</string>
     <string name="title_activity_maps">Map</string>
+    <string name="Input">Enter a location to search</string>
+
 
 </resources>

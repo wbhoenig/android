@@ -1,5 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".MapsActivity">
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:id="@+id/map" tools:context=".MapsActivity"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
+    android:layout_height="wrap_content" android:id="@+id/map" tools:context=".MapsActivity"
     android:name="com.google.android.gms.maps.SupportMapFragment"
-    tools:layout="@layout/activity_maps" />
+    tools:layout="@layout/activity_maps"
+    android:layout_margin="5dp"
+    android:layout_below="@+id/EnterLocation"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:id="@+id/EnterLocation"
+        android:layout_margin="5dp"
+        android:hint="@string/Input"
+        android:layout_height="wrap_content"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:id="@+id/Submit"
+        android:layout_toEndOf="@+id/EnterLocation"
+        android:layout_toRightOf="@+id/EnterLocation"
+        android:layout_above="@+id/map"
+        android:text="Submit"
+        android:onClick="displayCurrentLocation"
+        />
+</RelativeLayout>
