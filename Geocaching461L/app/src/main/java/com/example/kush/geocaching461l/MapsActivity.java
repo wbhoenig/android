@@ -85,5 +85,9 @@ public class MapsActivity extends FragmentActivity{
         //setUpMapIfNeeded();
     }
 
+    public void parseLocation (View view){
+
+    }
+
 
 }

@@ -27,6 +27,17 @@
         android:layout_toRightOf="@+id/EnterLocation"
         android:layout_above="@+id/map"
         android:text="Submit"
+        android:onClick="parseLocation"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:id="@+id/CurrentLocation"
+        android:layout_toEndOf="@+id/Submit"
+        android:layout_toRightOf="@+id/Submit"
+        android:layout_above="@+id/map"
+        android:text="Display Current Location"
         android:onClick="displayCurrentLocation"
         />
 </RelativeLayout>
