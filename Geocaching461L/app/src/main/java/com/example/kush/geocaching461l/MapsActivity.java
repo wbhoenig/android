@@ -119,6 +119,8 @@ public class MapsActivity extends FragmentActivity{
             HttpResponse response;
             StringBuilder stringBuilder = new StringBuilder();
 
+            e.setText("Made it here");
+
             response = client.execute(http);
             HttpEntity entity = response.getEntity();
             InputStream stream = entity.getContent();
@@ -139,20 +141,20 @@ public class MapsActivity extends FragmentActivity{
 
         }
         catch (IOException io) {
-            e.setText("IOException");
+            //e.setText("IOException");
             return;
         }
         catch (JSONException j) {
-            e.setText("JSONException");
+            //e.setText("JSONException");
             return;
         }
         catch (Exception ex) {
-            e.setText("Other exception");
+            //e.setText("Other exception");
             return;
         }
 
 
-        e.setText("");
+        //e.setText("");
 
     }
 
