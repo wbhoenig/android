@@ -4,7 +4,9 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -27,7 +29,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 
 public class MapsActivity extends FragmentActivity{
@@ -35,6 +40,8 @@ public class MapsActivity extends FragmentActivity{
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     double currentLatitude;
     double currentLongitude;
+    Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,27 +116,30 @@ public class MapsActivity extends FragmentActivity{
 
         st = st.replace(' ', '+');
         st = "https://maps.googleapis.com/maps/api/geocode/json?address=" + st;
-        st = st + "&key=AIzaSyBuRTXTtX1vQsE_OPSa9ZHRW3cAFmg4WnM";
+        //st = st + "&key=AIzaSyBuRTXTtX1vQsE_OPSa9ZHRW3cAFmg4WnM";
 
         String jsonString = "";
-
+        String oyster = "";
         try {
-            HttpGet http = new HttpGet(st);
+
             HttpClient client = new DefaultHttpClient();
-            HttpResponse response;
-            StringBuilder stringBuilder = new StringBuilder();
 
-            e.setText("Made it here");
+            URI uri = new URI(st);
 
-            response = client.execute(http);
-            HttpEntity entity = response.getEntity();
-            InputStream stream = entity.getContent();
-            int b;
-            while ((b = stream.read()) != -1) {
-                stringBuilder.append((char) b);
+            HttpGet httpGet = new HttpGet(uri);
+            HttpResponse response = client.execute(httpGet);
+
+            InputStream inputStream = response.getEntity().getContent();
+            Reader reader = new InputStreamReader(inputStream, "UTF-8");
+            StringBuffer buffer = new StringBuffer();
+            int inChar;
+
+            while ((inChar = reader.read()) != -1) {
+                buffer.append((char) inChar);
             }
 
-            JSONObject json = new JSONObject(stringBuilder.toString());
+            oyster = buffer.toString();
+            JSONObject json = new JSONObject(oyster);
             JSONArray array = json.getJSONArray("results");
             json = array.getJSONObject(0);
             json = json.getJSONObject("geometry");
@@ -140,21 +150,16 @@ public class MapsActivity extends FragmentActivity{
             mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("Marker"));
 
         }
-        catch (IOException io) {
-            //e.setText("IOException");
-            return;
-        }
         catch (JSONException j) {
-            //e.setText("JSONException");
+            e.setText("JSONException");
+            j.printStackTrace();
+            Log.d("bla", "\n\n\n\n\n\n\n\n\nJSON shit:\n");
+            Log.d("bla", oyster);
             return;
         }
-        catch (Exception ex) {
-            //e.setText("Other exception");
-            return;
-        }
+        catch (Exception ex) { return; }
 
-
-        //e.setText("");
+        e.setText("");
 
     }
 
