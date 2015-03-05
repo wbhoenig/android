@@ -14,12 +14,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -108,17 +114,20 @@ public class MapsActivity extends FragmentActivity{
         String jsonString = "";
 
         try {
-            URL url = new URL(st);
+            HttpGet http = new HttpGet(st);
+            HttpClient client = new DefaultHttpClient();
+            HttpResponse response;
+            StringBuilder stringBuilder = new StringBuilder();
 
-            e.setText("Working!!!");
-
-            /*BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-            String temp = "";
-            while ((temp = in.readLine()) != null) {
-                jsonString += temp;
+            response = client.execute(http);
+            HttpEntity entity = response.getEntity();
+            InputStream stream = entity.getContent();
+            int b;
+            while ((b = stream.read()) != -1) {
+                stringBuilder.append((char) b);
             }
 
-            JSONObject json = new JSONObject(jsonString);
+            JSONObject json = new JSONObject(stringBuilder.toString());
             JSONArray array = json.getJSONArray("results");
             json = array.getJSONObject(0);
             json = json.getJSONObject("geometry");
@@ -126,25 +135,22 @@ public class MapsActivity extends FragmentActivity{
             double lat = json.getDouble("lat");
             double lng = json.getDouble("lng");
 
-            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("Marker"));*/
+            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("Marker"));
 
-        }
-        catch (MalformedURLException ue) {
-            e.setText("Bad URL");
-            return;
         }
         catch (IOException io) {
             e.setText("IOException");
             return;
         }
-        /*catch (JSONException j) {
+        catch (JSONException j) {
             e.setText("JSONException");
             return;
-        }*/
-        catch (Exception exception) {
-            e.setText("Didn't work.");
+        }
+        catch (Exception ex) {
+            e.setText("Other exception");
             return;
         }
+
 
         e.setText("");
 
