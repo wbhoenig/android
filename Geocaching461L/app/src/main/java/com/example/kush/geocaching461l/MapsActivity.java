@@ -6,12 +6,20 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.EditText;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 public class MapsActivity extends FragmentActivity{
 
@@ -86,6 +94,41 @@ public class MapsActivity extends FragmentActivity{
     }
 
     public void parseLocation (View view){
+
+        EditText e = (EditText)findViewById(R.id.EnterLocation);
+        String st = e.getText().toString();
+
+        st = st.replace(' ', '+');
+        st = "https://maps.googleapis.com/maps/api/geocode/json?address=" + st;
+        st = st + "&key=AIzaSyBuRTXTtX1vQsE_OPSa9ZHRW3cAFmg4WnM";
+
+        String jsonString = "";
+
+        try {
+            URL url = new URL(st);
+            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+            String temp = "";
+            while ((temp = in.readLine()) != null) {
+                jsonString += temp;
+            }
+
+            JSONObject json = new JSONObject(jsonString);
+            JSONArray array = json.getJSONArray("results");
+            json = array.getJSONObject(0);
+            json = json.getJSONObject("geometry");
+            json = json.getJSONObject("location");
+            double lat = json.getDouble("lat");
+            double lng = json.getDouble("lng");
+
+            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("Marker"));
+
+        }
+        catch (Exception exception) {
+            e.setText("Didn't work.");
+            return;
+        }
+
+        e.setText("");
 
     }
 
