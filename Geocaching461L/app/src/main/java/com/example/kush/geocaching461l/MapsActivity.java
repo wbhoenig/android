@@ -115,7 +115,9 @@ public class MapsActivity extends FragmentActivity{
                 jsonString += temp;
             }
 
-            JSONObject json = new JSONObject(jsonString);
+            e.setText("Working!!!");
+
+            /*JSONObject json = new JSONObject(jsonString);
             JSONArray array = json.getJSONArray("results");
             json = array.getJSONObject(0);
             json = json.getJSONObject("geometry");
@@ -123,7 +125,7 @@ public class MapsActivity extends FragmentActivity{
             double lat = json.getDouble("lat");
             double lng = json.getDouble("lng");
 
-            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("Marker"));
+            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("Marker"));*/
 
         }
         catch (MalformedURLException ue) {
@@ -134,10 +136,10 @@ public class MapsActivity extends FragmentActivity{
             e.setText("IOException");
             return;
         }
-        catch (JSONException j) {
+        /*catch (JSONException j) {
             e.setText("JSONException");
             return;
-        }
+        }*/
         catch (Exception exception) {
             //e.setText("Didn't work.");
             e.setText(exception.getMessage());
