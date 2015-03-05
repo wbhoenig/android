@@ -109,15 +109,16 @@ public class MapsActivity extends FragmentActivity{
 
         try {
             URL url = new URL(st);
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+
+            e.setText("Working!!!");
+
+            /*BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
             String temp = "";
             while ((temp = in.readLine()) != null) {
                 jsonString += temp;
             }
 
-            e.setText("Working!!!");
-
-            /*JSONObject json = new JSONObject(jsonString);
+            JSONObject json = new JSONObject(jsonString);
             JSONArray array = json.getJSONArray("results");
             json = array.getJSONObject(0);
             json = json.getJSONObject("geometry");
@@ -141,8 +142,7 @@ public class MapsActivity extends FragmentActivity{
             return;
         }*/
         catch (Exception exception) {
-            //e.setText("Didn't work.");
-            e.setText(exception.getMessage());
+            e.setText("Didn't work.");
             return;
         }
 
