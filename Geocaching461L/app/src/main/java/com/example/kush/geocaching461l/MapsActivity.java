@@ -138,10 +138,11 @@ public class MapsActivity extends FragmentActivity{
             e.setText("JSONException");
             return;
         }
-        /*catch (Exception exception) {
-            e.setText("Didn't work.");
+        catch (Exception exception) {
+            //e.setText("Didn't work.");
+            e.setText(exception.getMessage());
             return;
-        }*/
+        }
 
         e.setText("");
 
