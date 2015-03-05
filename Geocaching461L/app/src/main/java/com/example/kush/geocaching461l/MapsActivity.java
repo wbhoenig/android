@@ -15,10 +15,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MapsActivity extends FragmentActivity{
@@ -123,10 +126,22 @@ public class MapsActivity extends FragmentActivity{
             mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("Marker"));
 
         }
-        catch (Exception exception) {
-            e.setText("Didn't work.");
+        catch (MalformedURLException ue) {
+            e.setText("Bad URL");
             return;
         }
+        catch (IOException io) {
+            e.setText("IOException");
+            return;
+        }
+        catch (JSONException j) {
+            e.setText("JSONException");
+            return;
+        }
+        /*catch (Exception exception) {
+            e.setText("Didn't work.");
+            return;
+        }*/
 
         e.setText("");
 
