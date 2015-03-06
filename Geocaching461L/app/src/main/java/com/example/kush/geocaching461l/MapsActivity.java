@@ -11,8 +11,11 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -36,7 +39,19 @@ import java.net.URI;
 import java.net.URL;
 
 public class MapsActivity extends FragmentActivity{
+    /*Bonus 1:          Clicking on marker will show the indentifier of the input.  Ex. entering Spain
+                            will produce a marker identified as "country);
+      Extra Features:    After each address is entered, the map will center on the newest added marker
+                             This bonus should be 3 points
 
+                         Markers have been replaced with ducks.  This bonus should be 2 points.
+                         Personally it is worth 15
+
+                         Button has been added to find current location.
+                         This feature should be worth 4 points
+                         
+                         TODO:  Fix main menu.  This is worth 6 points once working
+            */
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     double currentLatitude;
     double currentLongitude;
@@ -80,6 +95,7 @@ public class MapsActivity extends FragmentActivity{
             if (mMap != null) {
                 setUpMap();
             }
+            mMap.setMyLocationEnabled(true);
         }
     }
 
@@ -140,15 +156,22 @@ public class MapsActivity extends FragmentActivity{
 
             oyster = buffer.toString();
             JSONObject json = new JSONObject(oyster);
+
             JSONArray array = json.getJSONArray("results");
+            String name= ((JSONArray)json.get("results")).getJSONObject(0)
+                    .getJSONArray("address_components").getJSONObject(0).getJSONArray("types").getString(0);
             json = array.getJSONObject(0);
             json = json.getJSONObject("geometry");
             json = json.getJSONObject("location");
             double lat = json.getDouble("lat");
             double lng = json.getDouble("lng");
 
-            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("Marker"));
 
+            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.duckmedium)));
+           LatLng latlng=new LatLng(lat,lng);
+           CameraUpdate center=CameraUpdateFactory.newLatLng(latlng);
+            mMap.moveCamera(center);
+            mMap.getMyLocation();
         }
         catch (JSONException j) {
             e.setText("JSONException");
