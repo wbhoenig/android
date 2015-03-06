@@ -39,13 +39,12 @@ import java.net.URI;
 import java.net.URL;
 
 public class MapsActivity extends FragmentActivity{
-    /*Bonus 1:          Clicking on marker will show the indentifier of the input.  Ex. entering Spain
+    /*Bonus 1:          Clicking on marker will show the identifier of the input.  Ex. entering Spain
                             will produce a marker identified as "country);
       Extra Features:    After each address is entered, the map will center on the newest added marker
                              This bonus should be 3 points
 
                          Markers have been replaced with ducks.  This bonus should be 2 points.
-                         Personally it is worth 15
 
                          Button has been added to find current location.
                          This feature should be worth 4 points
@@ -178,7 +177,10 @@ public class MapsActivity extends FragmentActivity{
             Log.d("jsonString", jsonString);
             return;
         }
-        catch (Exception ex) { return; }
+        catch (Exception ex) {
+            e.setText("Unknown exception")
+            return;
+        }
 
         e.setText("");
 
