@@ -135,7 +135,6 @@ public class MapsActivity extends FragmentActivity{
         //st = st + "&key=AIzaSyBuRTXTtX1vQsE_OPSa9ZHRW3cAFmg4WnM";
 
         String jsonString = "";
-        String oyster = "";
         try {
 
             HttpClient client = new DefaultHttpClient();
@@ -154,8 +153,8 @@ public class MapsActivity extends FragmentActivity{
                 buffer.append((char) inChar);
             }
 
-            oyster = buffer.toString();
-            JSONObject json = new JSONObject(oyster);
+            jsonString = buffer.toString();
+            JSONObject json = new JSONObject(jsonString);
 
             JSONArray array = json.getJSONArray("results");
             String name= ((JSONArray)json.get("results")).getJSONObject(0)
@@ -174,10 +173,9 @@ public class MapsActivity extends FragmentActivity{
             mMap.getMyLocation();
         }
         catch (JSONException j) {
-            e.setText("JSONException");
+            e.setText("Invalid address");
             j.printStackTrace();
-            Log.d("bla", "\n\n\n\n\n\n\n\n\nJSON shit:\n");
-            Log.d("bla", oyster);
+            Log.d("jsonString", jsonString);
             return;
         }
         catch (Exception ex) { return; }
