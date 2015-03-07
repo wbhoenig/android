@@ -18,6 +18,9 @@
         android:layout_margin="5dp"
         android:hint="@string/Input"
         android:layout_height="wrap_content"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:maxWidth="250dp"
         />
     <Button
         android:layout_width="wrap_content"
@@ -29,16 +32,34 @@
         android:layout_above="@+id/map"
         android:text="Submit"
         android:onClick="parseLocation"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
         />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:id="@+id/CurrentLocation"
+        android:id="@+id/ZoomIn"
         android:layout_toEndOf="@+id/Submit"
         android:layout_toRightOf="@+id/Submit"
         android:layout_above="@+id/map"
-        android:text="Display Current Location"
-        android:onClick="displayCurrentLocation"
+        android:text="Zoom"
+        android:onClick="zoomIn"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
         />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:id="@+id/ZoomOut"
+        android:layout_toEndOf="@+id/ZoomIn"
+        android:layout_toRightOf="@+id/ZoomIn"
+        android:layout_above="@+id/map"
+        android:text="Expand"
+        android:onClick="zoomOut"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        />
+
 </RelativeLayout>

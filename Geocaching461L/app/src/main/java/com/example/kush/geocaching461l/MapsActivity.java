@@ -3,6 +3,7 @@ package com.example.kush.geocaching461l;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Debug;
 import android.support.v4.app.FragmentActivity;
@@ -39,21 +40,30 @@ import java.net.URI;
 import java.net.URL;
 
 public class MapsActivity extends FragmentActivity{
-    /*Bonus 1:          Clicking on marker will show the identifier of the input.  Ex. entering Spain
+    /*Bonus 1:          Clicking on marker will show the indentifier of the input.  Ex. entering Spain
                             will produce a marker identified as "country);
       Extra Features:    After each address is entered, the map will center on the newest added marker
-                             This bonus should be 3 points
+                         The map will also zoom appropriately based on if the address is a city (locality)or
+                         country
+                             This bonus should be 4 points
 
-                         Markers have been replaced with ducks.  This bonus should be 2 points.
+                         Markers have been replaced with ducks and quacking sounds.
+                         This bonus should be 5 points.
+                         Personally I think it is worth 15
 
                          Button has been added to find current location.
-                         This feature should be worth 4 points
+                         This feature should be worth 3 points
+
+                         Zoom In and Zoom out buttons have been added to speed up moving in the map
+                         This bonus should be worth 3 points
                          
                          TODO:  Fix main menu.  This is worth 6 points once working
             */
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     double currentLatitude;
     double currentLongitude;
+    double lat;
+    double lng;
     Context context;
 
     @Override
@@ -105,7 +115,7 @@ public class MapsActivity extends FragmentActivity{
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
     }
 
     public void displayCurrentLocation (View view) {
@@ -134,6 +144,7 @@ public class MapsActivity extends FragmentActivity{
         //st = st + "&key=AIzaSyBuRTXTtX1vQsE_OPSa9ZHRW3cAFmg4WnM";
 
         String jsonString = "";
+        //String oyster = "";
         try {
 
             HttpClient client = new DefaultHttpClient();
@@ -155,20 +166,46 @@ public class MapsActivity extends FragmentActivity{
             jsonString = buffer.toString();
             JSONObject json = new JSONObject(jsonString);
 
+
             JSONArray array = json.getJSONArray("results");
             String name= ((JSONArray)json.get("results")).getJSONObject(0)
                     .getJSONArray("address_components").getJSONObject(0).getJSONArray("types").getString(0);
             json = array.getJSONObject(0);
             json = json.getJSONObject("geometry");
             json = json.getJSONObject("location");
-            double lat = json.getDouble("lat");
-            double lng = json.getDouble("lng");
+            lat = json.getDouble("lat");
+            lng = json.getDouble("lng");
+            float zoom;
+            if(name=="country"){
+                zoom=3;
+            }
+            else if(name=="locality"){
+                zoom=13;
+            }
+            else if(name=="street_number"){
+                zoom=16;
+            }
+            else if(name=="postal_code"){
+                zoom=14;
+            }
+            else{
+                zoom=7;
+            }
 
 
             mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.duckmedium)));
            LatLng latlng=new LatLng(lat,lng);
            CameraUpdate center=CameraUpdateFactory.newLatLng(latlng);
+           //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoom));
+           // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoom));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom), 2000, null);
             mMap.moveCamera(center);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoom));
+           //mMap.animateCamera(CameraUpdateFactory.zoomTo(5), 2000, null);
+            if(name=="postal_code"||name=="street_address"){
+                zoomIn(view);
+            }
+            //mMap.moveCamera(center);
             mMap.getMyLocation();
         }
         catch (JSONException j) {
@@ -178,13 +215,24 @@ public class MapsActivity extends FragmentActivity{
             return;
         }
         catch (Exception ex) {
-            e.setText("Unknown exception")
+            e.setText("Unknown exception");
             return;
         }
 
+
+
         e.setText("");
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.quack);mp.start();
 
     }
 
+    public void zoomIn (View view) {
+        LatLng latlng=new LatLng(lat,lng);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15));
+    }
+    public void zoomOut (View view) {
+        LatLng latlng=new LatLng(lat,lng);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 3));
+    }
 
 }
